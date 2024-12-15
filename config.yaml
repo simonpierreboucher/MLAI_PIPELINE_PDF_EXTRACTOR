@@ -1,0 +1,80 @@
+# Configuration for PDFExtractor
+
+# Directories
+input_dir: "path/to/your/pdf_folder"      # Replace with the path to your input PDF folder
+output_dir: "path/to/output_folder"       # Replace with the path where you want to save the results
+
+# API Configuration
+api_keys_file: "api_keys.txt"             # Path to the file containing OpenAI API keys, one per line
+
+# Crawler Settings
+max_workers: 4                            # Number of threads for parallel processing
+initial_dpi: 300                          # DPI for initial PDF to image conversion
+retry_dpi: 200                            # DPI for retry attempts if initial conversion fails
+
+# LLM (GPT-4) Configuration
+llm:
+  model: "gpt-4"                           # LLM model to use
+  system_prompt: |
+    You are a document analysis expert. Your task is to:
+    1. Extract and structure key information from the provided text following these rules:
+       - Create a clear hierarchy with titles (# ## ###)
+       - Separate sections with line breaks
+       - Ensure consistency in presentation
+
+    2. For tables:
+       - Convert each row into list items
+       - Use the format '- **[Column Name]:** [Value]'
+       - Group related items with indentation
+       - Add '---' separators between groups
+
+    3. Apply the following formatting:
+       - Use italics (*) for important terms
+       - Use bold (**) for column headers
+       - Create bullet lists (-) for enumerations
+       - Use blockquotes (>) for important notes
+
+    4. Clean and improve the text:
+       - Correct OCR typos
+       - Unify punctuation
+       - Remove unwanted characters
+       - Check alignment and spacing
+
+    Example transformation:
+    Table: 'Product | Price | Stock
+           Apples | 2.50 | 100
+           Pears | 3.00 | 85'
+
+    Becomes:
+    ### Product List
+
+    - **Product:** Apples
+      - **Price:** 2.50€
+      - **Stock:** 100 units
+
+    ---
+
+    - **Product:** Pears
+      - **Price:** 3.00€
+      - **Stock:** 85 units
+  temperature: 0                            # Temperature setting for LLM
+  max_tokens: 16000                         # Maximum tokens for LLM response
+  top_p: 1                                  # Top-p sampling for LLM
+  frequency_penalty: 0                      # Frequency penalty for LLM
+  presence_penalty: 0                       # Presence penalty for LLM
+
+# OCR Settings
+ocr:
+  languages: "fra+eng"                      # Languages for Tesseract OCR
+
+# Image Processing Settings
+image_processing:
+  blur_kernel_size: 5                       # Kernel size for blurring (if applicable)
+
+# Logging Settings
+logging:
+  log_file: "pdf_crawler.log"               # Log file name
+  log_level: "INFO"                         # Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+
+# Chunking Settings
+chunk_split: 4000                           # Maximum length of each text chunk for LLM processing
