@@ -1,0 +1,12 @@
+requests
+pdf2image
+pytesseract
+Pillow
+pypdf
+numpy
+opencv-python
+openai
+python-dotenv
+tqdm
+rich
+PyYAML
